@@ -6,8 +6,8 @@ import Script from 'next/script';
 
 
 export const metadata = {
-  title: "StoryWizard",
-  description: "Replygen widget.",
+  title: "AISiteGen",
+  description: "AISiteGen",
 };
 
 export default function RootLayout({ children }) {

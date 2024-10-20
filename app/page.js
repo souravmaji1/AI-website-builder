@@ -115,7 +115,7 @@ export default function AIWebsiteGenerator() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <Link href='/story'>
+            <Link href='/websitegenerate'>
             <Button onClick={handleGenerate} className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
               Generate Your Website
             </Button>
