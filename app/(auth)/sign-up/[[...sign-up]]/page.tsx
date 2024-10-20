@@ -16,14 +16,14 @@ const SignInPage = () => {
           transition={{ duration: 0.5 }}
         >
           <div className="flex items-center justify-center space-x-3 mb-8">
-            <Image
+          {/*  <Image
               src="/homs.png"
               width={40}
               height={40}
               alt="VocalBotics Logo"
               className="rounded"
-            />
-            <span className="text-2xl font-bold text-white">VocalBotics</span>
+            /> */}
+            <span className="text-2xl font-bold text-white">AISiteGen</span>
           </div>
           
           <div className="bg-gray-800 p-8 rounded-xl shadow-2xl " style={{display:'flex',justifyContent:'center'}}>
