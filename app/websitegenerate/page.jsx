@@ -1,18 +1,17 @@
 "use client"
 
-
-
 import React, { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { AlertCircle, Loader2, Eye, Link, Sparkles } from "lucide-react"
+import { AlertCircle, Loader2, Eye, Link, Sparkles, Image as ImageIcon, Code, Smartphone, Tablet, Laptop } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai"
 import { Input } from "@/components/ui/input"
 import { createClient } from '@supabase/supabase-js'
 import { motion, AnimatePresence } from 'framer-motion'
+
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -29,6 +28,7 @@ export default function ProfessionalSiteBuilder() {
   const [generatedLink, setGeneratedLink] = useState('')
   const [isUpdating, setIsUpdating] = useState(false)
   const [isPublishing, setIsPublishing] = useState(false)
+  const [viewportSize, setViewportSize] = useState('desktop')
 
   useEffect(() => {
     if (generatedHtml && editPrompt) {
@@ -54,6 +54,17 @@ export default function ProfessionalSiteBuilder() {
       y: 0, 
       opacity: 1,
       transition: { duration: 0.5 }
+    }
+  }
+
+  const getViewportClass = () => {
+    switch (viewportSize) {
+      case 'mobile':
+        return 'w-[375px]'
+      case 'tablet':
+        return 'w-[768px]'
+      default:
+        return 'w-full'
     }
   }
 
@@ -87,6 +98,25 @@ export default function ProfessionalSiteBuilder() {
       })
   }
 
+  const searchPexelsImages = async (query, perPage = 3) => {
+    try {
+      const response = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=${perPage}`, {
+        headers: {
+          Authorization: '8F7YkPGpOsLiYRC0Q9jRYkCEwaP5W5E7gLm7N9dgvF5hUeuXNyYnKAr9',
+        },
+      });
+      const data = await response.json();
+      return data.photos.map(photo => ({
+        url: photo.src.large,
+        alt: photo.alt,
+        photographer: photo.photographer,
+      }));
+    } catch (error) {
+      console.error('Error fetching images from Pexels:', error);
+      return [];
+    }
+  };
+
   const generateWebsite = async () => {
     setIsLoading(true)
     setError('')
@@ -95,6 +125,9 @@ export default function ProfessionalSiteBuilder() {
       if (!apiKey) {
         throw new Error('Gemini API key is not set in the environment variables.')
       }
+
+      // Fetch images from Pexels
+      const images = await searchPexelsImages(prompt);
 
       const genAI = new GoogleGenerativeAI(apiKey)
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
@@ -127,7 +160,7 @@ export default function ProfessionalSiteBuilder() {
 
       const chat = model.startChat({ generationConfig, safetySettings })
 
-      const aiPrompt = `You are an expert frontend engineer and UI/UX designer. Create a professional , attractive and responsive landing page using HTML and Tailwind CSS for: ${prompt}. 
+      const aiPrompt = `You are an expert frontend engineer and UI/UX designer. Create a professional, attractive and responsive landing page using HTML and Tailwind CSS for: ${prompt}. 
       Follow these instructions carefully:
       1. Include the Tailwind CSS CDN link in the <head> section:
          <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -142,6 +175,9 @@ export default function ProfessionalSiteBuilder() {
       5. Use a color scheme that fits the theme of the website.
       6. Add appropriate padding, margins, and layout classes to create an attractive design.
       7. Include some basic animations or hover effects using Tailwind's transition classes.
+      8. Incorporate the following images from Pexels into your design:
+         ${images.map((img, index) => `Image ${index + 1}: ${img.url} (Alt: ${img.alt})`).join('\n         ')}
+      9. Make sure to include proper attribution for the Pexels images in the footer.
 
       Provide a complete HTML document that can be directly rendered in a browser. Do not include any explanations or additional text outside of the HTML.`
 
@@ -159,7 +195,20 @@ export default function ProfessionalSiteBuilder() {
     }
   }
 
+  const exportSourceCode = () => {
+    const blob = new Blob([generatedHtml], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'generated_website.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const updateWebsite = async () => {
+    
     try {
       const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY
       if (!apiKey) {
@@ -265,8 +314,35 @@ export default function ProfessionalSiteBuilder() {
         transition={{ duration: 0.3 }}
       >
         <div className="bg-black bg-opacity-50 text-white p-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold">Website Preview</h1>
-          <div className="flex space-x-2">
+          <div className="flex-1">
+            <h1 className="text-xl font-bold">AISiteGen</h1>
+          </div>
+          
+          <div className="flex-1 flex justify-center space-x-2">
+            <Button
+              onClick={() => setViewportSize('mobile')}
+              variant={viewportSize === 'mobile' ? 'default' : 'outline'}
+              size="icon"
+            >
+              <Smartphone className="h-4 w-4" />
+            </Button>
+            <Button
+              onClick={() => setViewportSize('tablet')}
+              variant={viewportSize === 'tablet' ? 'default' : 'outline'}
+              size="icon"
+            >
+              <Tablet className="h-4 w-4" />
+            </Button>
+            <Button
+              onClick={() => setViewportSize('desktop')}
+              variant={viewportSize === 'desktop' ? 'default' : 'outline'}
+              size="icon"
+            >
+              <Laptop className="h-4 w-4" />
+            </Button>
+          </div>
+          
+          <div className="flex-1 flex justify-end space-x-4">
             <Button onClick={() => setIsFullScreen(false)} variant="outline">
               <Eye className="mr-2 h-4 w-4" />
               Exit Full Screen
@@ -279,9 +355,13 @@ export default function ProfessionalSiteBuilder() {
               {isPublishing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Link className="mr-2 h-4 w-4" />}
               {isPublishing ? 'Publishing...' : 'Publish Website'}
             </Button>
+            <Button onClick={exportSourceCode} variant="outline">
+              <Code className="mr-2 h-4 w-4" />
+              Export Source Code
+            </Button>
           </div>
         </div>
-        <div className="flex-grow flex h-[calc(100vh-4rem)]">
+        <div className="flex-grow flex h-[calc(100vh-4rem)] justify-center">
           <AnimatePresence mode="wait">
             {isUpdating ? (
               <motion.div
@@ -294,15 +374,19 @@ export default function ProfessionalSiteBuilder() {
                 <LoadingAnimation text="Updating your website..." />
               </motion.div>
             ) : (
-              <motion.iframe
+              <motion.div
                 key="preview"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                srcDoc={generatedHtml}
-                title="Generated Website"
-                className="w-3/4 border-none"
-              />
+                className={`h-full ${getViewportClass()} transition-all duration-300 ease-in-out`}
+              >
+                <iframe
+                  srcDoc={generatedHtml}
+                  title="Generated Website"
+                  className="w-full h-full border-none"
+                />
+              </motion.div>
             )}
           </AnimatePresence>
           <div className="w-1/4 p-4 bg-gray-800 overflow-y-auto">
@@ -322,6 +406,18 @@ export default function ProfessionalSiteBuilder() {
             >
               {isUpdating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Apply Changes'}
             </Button>
+            <Alert className="mb-6 bg-gradient-to-br from-indigo-900 to-purple-900 border-blue-600">
+                  <AlertCircle className="h-5 w-5" />
+                  <AlertTitle className="font-bold">Important Things</AlertTitle>
+                  <AlertDescription>
+                    <ol className="list-decimal list-inside mt-2">
+                      <li>After you enter any prompt to update your generated site wait for couple of seconds.</li>
+                      <li>Click the "Export Source Code" button to download the code.</li>
+                      <li>Wait for the AI to create your site (this may take a moment).</li>
+                      <li>Once generated, you can view, edit, and publish your site.</li>
+                    </ol>
+                  </AlertDescription>
+                </Alert>
             {generatedLink && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
