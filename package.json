@@ -2,6 +2,7 @@
   "name": "ai-interview-moker",
   "version": "0.1.0",
   "private": true,
+  "type":"module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,6 +12,7 @@
     "db:studio": "npx drizzle-kit studio"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.29.2",
     "@clerk/nextjs": "^5.1.4",
     "@ffmpeg/core": "^0.12.6",
     "@ffmpeg/ffmpeg": "^0.12.10",

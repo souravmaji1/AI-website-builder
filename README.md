@@ -10,3 +10,4 @@ Mobile Responsiveness: Ensures websites look great on all devices
 Rapid Deployment: Publishes new websites instantly after generation
 Cost-Effective: Offers affordable plans starting at $19/month, significantly cheaper than traditional web design
 Unlimited Revisions: Provides the flexibility to make unlimited changes to your website
+

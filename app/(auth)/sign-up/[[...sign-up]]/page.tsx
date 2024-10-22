@@ -23,7 +23,7 @@ const SignInPage = () => {
               alt="VocalBotics Logo"
               className="rounded"
             /> */}
-            <span className="text-2xl font-bold text-white">AISiteGen</span>
+            <span className="text-2xl font-bold text-white">BuilderHall</span>
           </div>
           
           <div className="bg-gray-800 p-8 rounded-xl shadow-2xl " style={{display:'flex',justifyContent:'center'}}>

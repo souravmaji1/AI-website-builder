@@ -160,7 +160,7 @@ export default function ProfessionalSiteBuilder() {
 
       const chat = model.startChat({ generationConfig, safetySettings })
 
-      const aiPrompt = `You are an expert frontend engineer and UI/UX designer. Create a professional, attractive and responsive landing page using HTML and Tailwind CSS for: ${prompt}. 
+      const aiPrompt = `You are an expert frontend , backend and UI/UX designer. Create a professional, attractive and responsive landing page using HTML and Tailwind CSS for: ${prompt}. 
       Follow these instructions carefully:
       1. Include the Tailwind CSS CDN link in the <head> section:
          <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">

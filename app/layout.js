@@ -6,8 +6,8 @@ import Script from 'next/script';
 
 
 export const metadata = {
-  title: "AISiteGen",
-  description: "AISiteGen",
+  title: "BuilderHall",
+  description: "BuilderHall",
 };
 
 export default function RootLayout({ children }) {

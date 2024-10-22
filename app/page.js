@@ -60,7 +60,7 @@ export default function AIWebsiteGenerator() {
           transition={{ duration: 0.5 }}
         >
           <Sparkles className="h-8 w-8 text-green-400" />
-          <span className="text-2xl font-bold">AI Site Gen</span>
+          <span className="text-2xl font-bold">BuilderHall</span>
         </motion.div>
 
         {/* Desktop Navigation */}
@@ -204,7 +204,7 @@ export default function AIWebsiteGenerator() {
                 <TableRow>
                   <TableHead className="w-[200px]">Feature</TableHead>
                   <TableHead className="text-center">Traditional Web Design</TableHead>
-                  <TableHead className="text-center">AI Site Gen</TableHead>
+                  <TableHead className="text-center">BuilderHall</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -248,7 +248,7 @@ export default function AIWebsiteGenerator() {
             <h2 className="text-3xl font-bold mb-12 text-center">What Our Customers Say</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <TestimonialCard
-                quote="AI Site Gen transformed our business. We launched our website in hours, not weeks!"
+                quote="BuilderHall transformed our business. We launched our website in hours, not weeks!"
                 author="Sarah J., Startup Founder"
               />
               <TestimonialCard
@@ -337,7 +337,7 @@ export default function AIWebsiteGenerator() {
 
       <footer className="bg-gray-800 py-8">
         <div className="container mx-auto px-4 text-center text-gray-400">
-          <p>&copy; 2024 AI Site Gen. All rights reserved.</p>
+          <p>&copy; 2024 BuilderHall. All rights reserved.</p>
         </div>
       </footer>
     </div>
