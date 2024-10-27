@@ -11,6 +11,7 @@ import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/ge
 import { Input } from "@/components/ui/input"
 import { createClient } from '@supabase/supabase-js'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useUser } from '@clerk/nextjs'
 
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -29,6 +30,9 @@ export default function ProfessionalSiteBuilder() {
   const [isUpdating, setIsUpdating] = useState(false)
   const [isPublishing, setIsPublishing] = useState(false)
   const [viewportSize, setViewportSize] = useState('desktop')
+  const { user } = useUser();
+  const [websites, setWebsites] = useState([])
+  const [isSaving, setIsSaving] = useState(false)
 
   useEffect(() => {
     if (generatedHtml && editPrompt) {
@@ -68,23 +72,53 @@ export default function ProfessionalSiteBuilder() {
     }
   }
 
-  const generateLink = async () => {
+  const saveWebsite = async () => {
+    setIsSaving(true)
     try {
+      const websiteData = {
+        user_id: user.id,
+        html: generatedHtml,
+        description: prompt,
+        title: prompt.split(' ').slice(0, 5).join(' ') + '...', // Create a brief title from the prompt
+        created_at: new Date().toISOString()
+      }
+
       const { data, error } = await supabase
         .from('generated_websites')
-        .insert({ html: generatedHtml })
+        .insert(websiteData)
         .select()
 
       if (error) throw error
 
-      const id = data[0].id
-      const link = `${window.location.origin}/preview/${id}`
+      // Update local state with the new website
+      setWebsites([data[0], ...websites])
+      setError('')
+      return data[0]
+    } catch (error) {
+      console.error('Error saving website:', error)
+      setError('Failed to save website: ' + error.message)
+      return null
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  // Modify the generateLink function to save the website first
+  const generateLink = async () => {
+    setIsPublishing(true)
+    try {
+      // First save the website
+      const savedWebsite = await saveWebsite()
+      if (!savedWebsite) throw new Error('Failed to save website')
+
+      // Generate the shareable link
+      const link = `${window.location.origin}/preview/${savedWebsite.id}`
       setGeneratedLink(link)
       setError('')
     } catch (error) {
       console.error('Error generating link:', error)
       setError('Error generating link: ' + error.message)
-    }  finally {
+    } finally {
       setIsPublishing(false)
     }
   }

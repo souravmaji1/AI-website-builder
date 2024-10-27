@@ -1,4 +1,4 @@
-AI Site Gen is an innovative AI-powered website creation platform that revolutionizes the web design process. It offers instant, professional website generation to enhance productivity and creativity for businesses and individuals alike.
+BuilderHall is an innovative AI-powered website creation platform that revolutionizes the web design process. It offers instant, professional website generation to enhance productivity and creativity for businesses and individuals alike.
 Key features:
 
 AI-Powered Design: Utilizes advanced AI models to generate stunning website designs in seconds
