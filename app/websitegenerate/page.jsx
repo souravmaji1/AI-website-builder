@@ -310,34 +310,6 @@ export default function ProfessionalSiteBuilder() {
     </div>
   )
 
-  const VibrationLoadingAnimation = () => (
-    <div className="flex items-center justify-center h-full">
-      <motion.div
-        className="flex space-x-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-      >
-        {[0, 1, 2].map((index) => (
-          <motion.div
-            key={index}
-            className="w-4 h-16 bg-blue-500 rounded-full"
-            animate={{
-              scaleY: [1, 2, 1],
-              translateY: ['0%', '-50%', '0%'],
-            }}
-            transition={{
-              duration: 1,
-              repeat: Infinity,
-              repeatType: 'loop',
-              delay: index * 0.2,
-            }}
-          />
-        ))}
-      </motion.div>
-    </div>
-  )
-
   if (isFullScreen && generatedHtml) {
     return (
       <motion.div 
@@ -349,7 +321,7 @@ export default function ProfessionalSiteBuilder() {
       >
         <div className="bg-black bg-opacity-50 text-white p-4 flex justify-between items-center">
           <div className="flex-1">
-            <h1 className="text-xl font-bold">AISiteGen</h1>
+            <h1 className="text-xl font-bold">BuilderHall</h1>
           </div>
           
           <div className="flex-1 flex justify-center space-x-2">
